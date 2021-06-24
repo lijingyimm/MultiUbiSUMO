@@ -1,6 +1,12 @@
 # MultiUbiSUMO
 Predict protein ubiquitylation and SUMOylation sites from protein sequences simultaneously
 
+## Overview
+
+![The overview of our workflow for predicting protein ubiquitylation and SUMOylation sites.](https://github.com/lijingyimm/MultiUbiSUMO/blob/main/overflow.png)
+
+
+
 
 ## Getting Started
  
