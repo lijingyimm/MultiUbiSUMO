@@ -1,13 +1,6 @@
 # MultiUbiSUMO
 Predict protein ubiquitylation and SUMOylation sites from protein sequences simultaneously
 
-## Overview
-
-![The overview of our workflow for predicting protein ubiquitylation and SUMOylation sites.](https://github.com/lijingyimm/MultiUbiSUMO/blob/main/overflow.png)
-
-
-
-
 ## Getting Started
  
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
@@ -58,3 +51,10 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 ```
 python  studyensemble.py
 ```
+
+
+## Overview
+
+![The overview of our workflow for predicting protein ubiquitylation and SUMOylation sites.](https://github.com/lijingyimm/MultiUbiSUMO/blob/main/overflow.png)
+
+
