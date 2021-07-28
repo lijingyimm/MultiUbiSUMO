@@ -15,10 +15,7 @@ pip install scikit-learn
 pip install tensorflow-gpu
 ```
  
-## Running the tests
- 
-Explain how to run the automated tests for this system
- 
+
  
 ## Built With
  
