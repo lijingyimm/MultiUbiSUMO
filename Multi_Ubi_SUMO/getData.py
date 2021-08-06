@@ -99,10 +99,9 @@ def read_fasta(fasta_file,windown_length,pssmfilepath,label):
     sum3=0
     with open(fasta_file, 'r') as fp:
         win = windown_length
-        neg = 0    #负样本个数
-        pos_1 = 0    #正样本个数
+        neg = 0    #number of negative
+        pos_1 = 0    # number of positive
         pos_2 = 0
-        #aseqpssm = ''
         wrr = 0
         for line in fp:
             flag = 0
@@ -111,41 +110,33 @@ def read_fasta(fasta_file,windown_length,pssmfilepath,label):
                 line = line.replace('  ','\t')
                 line = line.replace(' ','\t')
                 line1 = line.split('\t')
-                name1 = line1[0]    #序列名
+                name1 = line1[0]    
                 # print(name1)
-                id = int(line1[1])  #位置
-                type1 = line1[2]     #PTM类型  ubi或sumo
-                seq1 = line1[3]     #fasta序列
-                id_num.append(id-1)   #位点
+                id = int(line1[1])  
+                type1 = line1[2]    
+                seq1 = line1[3]   
+                id_num.append(id-1) 
 
-                del line1           #删除变量
+                del line1        
 
 
             elif (num > 2):
                 line = line.replace('  ','\t')
                 line = line.replace(' ','\t')            
                 line1 = line.split('\t')
-                name = line1[0]   #第二个序列名
-                # print(name)
-                type = line1[2]   #PTM类型
-                # print(type)
-                seq = line1[3]    #序列
+                name = line1[0] 
+                type = line1[2]  
+                seq = line1[3] 
 
-                if (name == name1 and type1 =='UBI'):     #若为同一序列，加上该位置
+                if (name == name1 and type1 =='UBI'):   
                     id_num.append(int(line1[1])-1)
                     # print("id_num_ubi",id_num)
-
                 elif(name != name1 and type1 =='UBI'):
-                    #del aseqpssm
-                    #aseqpssm = getpssmfeature(name1,pssmfilepath)
-                    for i in range(len(seq1)):     #循环序列中位置
+                    for i in range(len(seq1)):   
                         if (seq1[i]=='K' and find(i, id_num)):
                             wrr += 10
                             pos_1 += 1
-                            subSeq = subSeqq(seq1, i, win)  #截窗
-                            # print(subSeq)
-                            # with open('result/sq1.txt', mode='a') as resFile:
-                            #     resFile.write(str(subSeq)+'\r\n')
+                            subSeq = subSeqq(seq1, i, win)  
 
                             if(type == type1):    
                                 final_seq = [1,0] + [AA for AA in subSeq]
@@ -153,20 +144,12 @@ def read_fasta(fasta_file,windown_length,pssmfilepath,label):
                                 # print('sum1: ',sum1)
                                 oneofkey_1.append(final_seq)
                                 del subSeq, final_seq
-                            # else:
-                            #     final_seq = [1,1] + [AA for AA in subSeq]
-                            #     sum3+=1
-                            #     print('sum333333333333333333333:',sum3)
-                            #     flag=1
-                            #     oneofkey_3.append(final_seq)
-                            #     del subSeq, final_seq
-                                                              
-                        elif (seq1[i]=='K' and not find(i, id_num)):   #负样本
+ 
+                        elif (seq1[i]=='K' and not find(i, id_num)):  
                             neg += 1
                             subSeq = subSeqq(seq1, i, win)
-                            final_seq = [0,0] + [AA for AA in subSeq]       #0     none
+                            final_seq = [0,0] + [AA for AA in subSeq]     
                             sum0 += 1
-                            # print('sum0',sum0)
                             oneofkey_0.append(final_seq)
                             del subSeq, final_seq
   
@@ -178,30 +161,27 @@ def read_fasta(fasta_file,windown_length,pssmfilepath,label):
                     type1 = type
                     id_num.append(int(line1[1])-1)
                     if(flag):
-                        line = line.replace(line,'')     #去掉已经被标记为3的位置和序列
+                        line = line.replace(line,'') 
                     del line1
                     del line
 
-                elif (name == name1 and type1 =='SUMO'):     #若为同一序列，加上该位置
+                elif (name == name1 and type1 =='SUMO'):  
                     id_num.append(int(line1[1])-1)
                     # print("id_num_sumo",id_num)
                     del line1
                 elif(name != name1 and type1 =='SUMO'):
-                    for i in range(len(seq1)):     #循环序列中位置
+                    for i in range(len(seq1)): 
                         if (seq1[i]=='K' and find(i, id_num)):
                             wrr += 10
                             pos_2 += 1
-                            subSeq = subSeqq(seq1, i, win)  #截窗
-                            # print(subSeq)
-                            # with open('result/sq2.txt', mode='a') as resFile:
-                            #     resFile.write(str(subSeq)+'\r\n')
+                            subSeq = subSeqq(seq1, i, win)  
                             final_seq = [0,1] + [AA for AA in subSeq]       #sumo
                             sum2+=1
                             # print('sum2: ',sum2)
                             oneofkey_2.append(final_seq)
                             del subSeq, final_seq
 
-                        elif (seq1[i]=='K' and not find(i, id_num)):   #负样本
+                        elif (seq1[i]=='K' and not find(i, id_num)): 
                             neg += 1
                             subSeq = subSeqq(seq1, i, win)
                             final_seq = [0,0] + [AA for AA in subSeq]
@@ -222,7 +202,7 @@ def read_fasta(fasta_file,windown_length,pssmfilepath,label):
 
 
         ##### ##### ##### ##### ##### ##### ##### ##### ##### #####
-        for i in range(len(seq1)):   #最后一个序列处理
+        for i in range(len(seq1)):   
             if (seq1[i]=='K' and find(i, id_num)):           
                 pos_2 += 1
                 subSeq = subSeqq(seq1, i, win)
@@ -250,10 +230,10 @@ def read_fasta(fasta_file,windown_length,pssmfilepath,label):
                 continue
             line = line.replace('  ','\t')
             line = line.replace(' ','\t')
-            name = line.split('\t', 4)[0] #去掉列表中每一个元素的换行符
-            num = line.split('\t', 4)[1] #去掉列表中每一个元素的换行符
-            type = line.split('\t', 4)[2] #去掉列表中每一个元素的换行符
-            seq = line.split('\t', 4)[3] #去掉列表中每一个元素的换行符
+            name = line.split('\t', 4)[0] 
+            num = line.split('\t', 4)[1] 
+            type = line.split('\t', 4)[2] 
+            seq = line.split('\t', 4)[3] 
             if type =='CROSS':
                 k += 1
                 # print(name, num)
@@ -264,73 +244,14 @@ def read_fasta(fasta_file,windown_length,pssmfilepath,label):
                 oneofkey_3.append(f_seq)
                 del subSeq, f_seq
 
-            # if type =='UBI':
-            #     k += 1
-            #     print(name, num)
-            #     subSeq = subSeqq(seq, int(num)-1, win)  #截窗
-            #     f_seq = [1,1] + [AA for AA in subSeq]
-            #     # flag=1
-            #     print(f_seq)
-            #     oneofkey_1.append(f_seq)
-            #     del subSeq, f_seq
-
-            # if type =='SUMO':
-            #     k += 1
-            #     print(name, num)
-            #     subSeq = subSeqq(seq, int(num)-1, win)  #截窗
-            #     f_seq = [1,1] + [AA for AA in subSeq]
-            #     # flag=1
-            #     print(f_seq)
-            #     oneofkey_2.append(f_seq)
-            #     del subSeq, f_seq
-
-
-        # print(k)
-
-
-    # with open(fasta_file, "r") as f:
-    #     k = 0
-    #     i = 0
-    #     for line in f.readlines():
-    #         i += 1
-    #         if i == 1:
-    #             continue
-
-    #         name = line.split('\t', 4)[0] #去掉列表中每一个元素的换行符
-    #         num = line.split('\t', 4)[1] #去掉列表中每一个元素的换行符
-    #         type = line.split('\t', 4)[2] #去掉列表中每一个元素的换行符
-    #         seq = line.split('\t', 4)[3] #去掉列表中每一个元素的换行符
-    #         if type =='UBI':
-    #             j=0
-    #             with open(fasta_file, "r") as f1:
-    #                 for line1 in f1.readlines():
-    #                     j += 1
-    #                     if j == 1:
-    #                         continue
-    #                     name1 = line1.split('\t', 4)[0] #去掉列表中每一个元素的换行符
-    #                     num1 = line1.split('\t', 4)[1] #去掉列表中每一个元素的换行符
-    #                     type1 = line1.split('\t', 4)[2] #去掉列表中每一个元素的换行符
-    #                     if type1 == 'SUMO':
-    #                         if name == name1 and num == num1:
-    #                             k += 1
-    #                             print(name, num)
-    #                             subSeq = subSeqq(seq, int(num)-1, win)  #截窗
-    #                             f_seq = [1,1] + [AA for AA in subSeq]
-    #                             # flag=1
-    #                             print(f_seq)
-    #                             oneofkey_3.append(f_seq)
-    #                             del subSeq, f_seq
-    #     print(k)
         return oneofkey_0,oneofkey_1,oneofkey_2,oneofkey_3
-        #return oneofkey_pos,oneofkey_neg,pssm_pos,pssm_neg,oneofkey_pos,oneofkey_neg
-    # print('1,2,3',sum0,sum1,sum2)
 
 def read_fasta_test(fasta_file,windown_length,pssmfilepath,label):
     
     ##### fasta_file: string #####
     ##### windown_length = 24 #####
     ##### pssmfilepath: '/pssmpickle/' #####
-    ##### lable: train=true  test=flase #####???
+    ##### lable: train=true  test=flase #####
 
     oneofkey_0 = []
     oneofkey_1 = []
@@ -348,8 +269,8 @@ def read_fasta_test(fasta_file,windown_length,pssmfilepath,label):
     sum3=0
     with open(fasta_file, 'r') as fp:
         win = windown_length
-        neg = 0    #负样本个数
-        pos_1 = 0    #正样本个数
+        neg = 0    
+        pos_1 = 0    
         pos_2 = 0
         #aseqpssm = ''
         wrr = 0
@@ -360,44 +281,40 @@ def read_fasta_test(fasta_file,windown_length,pssmfilepath,label):
                 line = line.replace('  ','\t')
                 line = line.replace(' ','\t')
                 line1 = line.split('\t')
-                name1 = line1[0]    #序列名
+                name1 = line1[0]    
                 name_list.append(name1)
 
                 # print(name1)
-                id = int(line1[1])  #位置
+                id = int(line1[1])  
                 id_list.append(id)
-                type1 = line1[2]     #PTM类型  ubi或sumo
-                seq1 = line1[3]     #fasta序列
-                id_num.append(id-1)   #位点
+                type1 = line1[2]     #ubi或sumo
+                seq1 = line1[3]     #fasta
+                id_num.append(id-1)  
 
-                del line1           #删除变量
+                del line1          
 
 
             elif (num > 2):
                 line = line.replace('  ','\t')
                 line = line.replace(' ','\t')
                 line1 = line.split('\t')
-                name = line1[0]   #第二个序列名
+                name = line1[0] 
                 name_list.append(name)
                 id_list.append(int(line1[1]))
-                type = line1[2]   #PTM类型
-                seq = line1[3]    #序列
+                type = line1[2]   
+                seq = line1[3]   
 
-                if (name == name1 and type1 =='UBI'):     #若为同一序列，加上该位置
+                if (name == name1 and type1 =='UBI'):   
                     id_num.append(int(line1[1])-1)
                     # print("id_num_ubi",id_num)
 
                 elif(name != name1 and type1 =='UBI'):
-                    #del aseqpssm
-                    #aseqpssm = getpssmfeature(name1,pssmfilepath)
-                    for i in range(len(seq1)):     #循环序列中位置
+
+                    for i in range(len(seq1)):    
                         if (seq1[i]=='K' and find(i, id_num)):
                             wrr += 10
                             pos_1 += 1
-                            subSeq = subSeqq(seq1, i, win)  #截窗
-                            # print(subSeq)
-                            # with open('result/sq1.txt', mode='a') as resFile:
-                            #     resFile.write(str(subSeq)+'\r\n')
+                            subSeq = subSeqq(seq1, i, win)  
 
                             if(type == type1):    
                                 final_seq = [1,0] + [AA for AA in subSeq]
@@ -405,18 +322,12 @@ def read_fasta_test(fasta_file,windown_length,pssmfilepath,label):
                                 # print('sum1: ',sum1)
                                 oneofkey_1.append(final_seq)
                                 del subSeq, final_seq
-                            # else:
-                            #     final_seq = [1,1] + [AA for AA in subSeq]
-                            #     sum3+=1
-                            #     print('sum333333333333333333333:',sum3)
-                            #     flag=1
-                            #     oneofkey_3.append(final_seq)
-                            #     del subSeq, final_seq
-                                                              
-                        elif (seq1[i]=='K' and not find(i, id_num)):   #负样本
+
+                                                
+                        elif (seq1[i]=='K' and not find(i, id_num)):   
                             neg += 1
                             subSeq = subSeqq(seq1, i, win)
-                            final_seq = [0,0] + [AA for AA in subSeq]       #0     none
+                            final_seq = [0,0] + [AA for AA in subSeq]   
                             sum0 += 1
                             # print('sum0',sum0)
                             oneofkey_0.append(final_seq)
@@ -430,30 +341,27 @@ def read_fasta_test(fasta_file,windown_length,pssmfilepath,label):
                     type1 = type
                     id_num.append(int(line1[1])-1)
                     if(flag):
-                        line = line.replace(line,'')     #去掉已经被标记为3的位置和序列
+                        line = line.replace(line,'')     
                     del line1
                     del line
 
-                elif (name == name1 and type1 =='SUMO'):     #若为同一序列，加上该位置
+                elif (name == name1 and type1 =='SUMO'):     
                     id_num.append(int(line1[1])-1)
                     # print("id_num_sumo",id_num)
                     del line1
                 elif(name != name1 and type1 =='SUMO'):
-                    for i in range(len(seq1)):     #循环序列中位置
+                    for i in range(len(seq1)):    
                         if (seq1[i]=='K' and find(i, id_num)):
                             wrr += 10
                             pos_2 += 1
-                            subSeq = subSeqq(seq1, i, win)  #截窗
-                            # print(subSeq)
-                            # with open('result/sq2.txt', mode='a') as resFile:
-                            #     resFile.write(str(subSeq)+'\r\n')
-                            final_seq = [0,1] + [AA for AA in subSeq]       #sumo
+                            subSeq = subSeqq(seq1, i, win)  
+                            final_seq = [0,1] + [AA for AA in subSeq]   
                             sum2+=1
                             # print('sum2: ',sum2)
                             oneofkey_2.append(final_seq)
                             del subSeq, final_seq
 
-                        elif (seq1[i]=='K' and not find(i, id_num)):   #负样本
+                        elif (seq1[i]=='K' and not find(i, id_num)):   
                             neg += 1
                             subSeq = subSeqq(seq1, i, win)
                             final_seq = [0,0] + [AA for AA in subSeq]
@@ -474,7 +382,7 @@ def read_fasta_test(fasta_file,windown_length,pssmfilepath,label):
 
 
         ##### ##### ##### ##### ##### ##### ##### ##### ##### #####
-        for i in range(len(seq1)):   #最后一个序列处理
+        for i in range(len(seq1)):   
             if (seq1[i]=='K' and find(i, id_num)):           
                 pos_2 += 1
                 subSeq = subSeqq(seq1, i, win)
@@ -503,54 +411,20 @@ def read_fasta_test(fasta_file,windown_length,pssmfilepath,label):
                 continue
             line = line.replace('  ','\t')
             line = line.replace(' ','\t')
-            name = line.split('\t', 4)[0] #去掉列表中每一个元素的换行符
-            num = line.split('\t', 4)[1] #去掉列表中每一个元素的换行符
-            type = line.split('\t', 4)[2] #去掉列表中每一个元素的换行符
-            seq = line.split('\t', 4)[3] #去掉列表中每一个元素的换行符
+            name = line.split('\t', 4)[0] 
+            num = line.split('\t', 4)[1] 
+            type = line.split('\t', 4)[2] 
+            seq = line.split('\t', 4)[3] 
             if type =='CROSS':
                 k += 1
                 # print(name, num)
-                subSeq = subSeqq(seq, int(num)-1, win)  #截窗
+                subSeq = subSeqq(seq, int(num)-1, win)  
                 f_seq = [1,1] + [AA for AA in subSeq]
                 # flag=1
                 # print(f_seq)
                 oneofkey_3.append(f_seq)
                 del subSeq, f_seq
-        # print(k)
 
-    # with open(fasta_file, "r") as f:
-    #     k = 0
-    #     i = 0
-    #     for line in f.readlines():
-    #         i += 1
-    #         if i == 1:
-    #             continue
-
-    #         name = line.split('\t', 4)[0] #去掉列表中每一个元素的换行符
-    #         num = line.split('\t', 4)[1] #去掉列表中每一个元素的换行符
-    #         type = line.split('\t', 4)[2] #去掉列表中每一个元素的换行符
-    #         seq = line.split('\t', 4)[3] #去掉列表中每一个元素的换行符
-    #         if type =='UBI':
-    #             j=0
-    #             with open(fasta_file, "r") as f1:
-    #                 for line1 in f1.readlines():
-    #                     j += 1
-    #                     if j == 1:
-    #                         continue
-    #                     name1 = line1.split('\t', 4)[0] #去掉列表中每一个元素的换行符
-    #                     num1 = line1.split('\t', 4)[1] #去掉列表中每一个元素的换行符
-    #                     type1 = line1.split('\t', 4)[2] #去掉列表中每一个元素的换行符
-    #                     if type1 == 'SUMO':
-    #                         if name == name1 and num == num1:
-    #                             k += 1
-    #                             print(name, num)
-    #                             subSeq = subSeqq(seq, int(num)-1, win)  #截窗
-    #                             f_seq = [1,1] + [AA for AA in subSeq]
-    #                             print(f_seq)
-    #                             # flag=1
-    #                             oneofkey_3.append(f_seq)
-    # #                             del subSeq, f_seq
-    #     print(k)
         return oneofkey_0,oneofkey_1,oneofkey_2,oneofkey_3,name_list,id_list
 
 def get_data(string,pssmfilepath,label):
@@ -561,14 +435,6 @@ def get_data(string,pssmfilepath,label):
     
     winnum = 24
     oneofkey_0,oneofkey_1,oneofkey_2,oneofkey_3 = read_fasta(string, winnum, pssmfilepath, label)
-    #oneofkey_pos,oneofkey_neg,pssm_pos,pssm_neg,physical_pos,physical_neg = read_fasta(string,winnum,pssmfilepath,label)
-    
-    #oneofkey_pos = pd.DataFrame(oneofkey_pos)
-    #oneofkey_pos = oneofkey_pos.as_matrix()
-    
-    #oneofkey_neg = pd.DataFrame(oneofkey_neg)
-    #oneofkey_neg = oneofkey_neg.as_matrix()
-    
     return oneofkey_0,oneofkey_1,oneofkey_2,oneofkey_3
 
 def get_data_test(string,pssmfilepath,label):
@@ -579,46 +445,11 @@ def get_data_test(string,pssmfilepath,label):
     
     winnum = 24
     oneofkey_0,oneofkey_1,oneofkey_2,oneofkey_3,name_list,id_list = read_fasta_test(string, winnum, pssmfilepath, label)
-    #oneofkey_pos,oneofkey_neg,pssm_pos,pssm_neg,physical_pos,physical_neg = read_fasta(string,winnum,pssmfilepath,label)
-    
-    #oneofkey_pos = pd.DataFrame(oneofkey_pos)
-    #oneofkey_pos = oneofkey_pos.as_matrix()
-    
-    #oneofkey_neg = pd.DataFrame(oneofkey_neg)
-    #oneofkey_neg = oneofkey_neg.as_matrix()
-    
+
     return oneofkey_0,oneofkey_1,oneofkey_2,oneofkey_3,name_list,id_list
-    #return oneofkey_pos,oneofkey_neg,pssm_pos,pssm_neg,physical_pos,physical_neg 
 
-# def load_data(poswindows_filepath,negwindows_filepath):
-#     seq = ''
-#     windows_pos = []
-#     windows_neg = []
-#     with open (poswindows_filepath,"r") as fp:
-#         for line in fp:
-#             seq = line.rstrip("\n")
-#             pos_sequence = [1] + [aa for aa in seq]
-#             windows_pos.append(pos_sequence)
-#     del pos_sequence
-
-#     with open (negwindows_filepath, "r") as fp:
-#         for line in fp:
-#             seq = line.rstrip("\n")
-#             neg_sequence = [0] + [aa for aa in seq]
-#             windows_neg.append(neg_sequence)
-#     del neg_sequence
-
-    # print('windows_pos:', windows_pos)
-    # print('windows_neg:', windows_neg)
-    # return windows_pos,windows_neg
 
 if __name__ == '__main__':
 
     g=getdata()
 
-#
-# all_train_windows_pos,all_train_windows_neg = get_data(r'data/multidata/realtrain0.txt',r'data/pssmpickle2/',label= True)
-
-
-#print(all_train_windows_pos)
-#print(all_train_windows_neg)

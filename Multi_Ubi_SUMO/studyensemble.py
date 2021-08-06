@@ -35,21 +35,6 @@ def normalization(array):
 
 	return normal_array
 
-'''
-def normalization2(array):
-
-	normal_array = []
-	de = 1
-	for i in array:
-		de *= i
-	print(de)
-	for i in array:
-		nu = i
-		print(nu)
-		normal_array.append(math.log(nu,de))
-
-	return normal_array
-'''
 def normalization_softmax(array):
 
 	normal_array = []
@@ -91,9 +76,6 @@ def define_stacked_model(members):
 	hidden = Dense(7, activation='relu')(merge)
 	output = Dense(3, activation='softmax')(hidden)
 	model = Model(inputs=ensemble_visible, outputs=output)
-	#plot graph of ensemble
-	#plot_model(model, show_shapes=True, to_file='model_graph.png')
-	# print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
 	model.compile(loss='categorical_crossentropy', optimizer='Nadam', metrics=[keras.metrics.categorical_accuracy])
 
 	return model
@@ -317,16 +299,6 @@ for t in range(0,iteration_times):
 
 	#normalize checkpoit data as weights
 	weight_array = normalization(weight_array)
-
-	# data = pd.DataFrame(weight_array)
-	# writer = pd.ExcelWriter('result/weight_array.xlsx')		# 写入Excel文件
-	# data.to_excel(writer, 'page_1', float_format='%.5f')		# ‘page_1’是写入excel的sheet名
-	# writer.save()
-	# writer.close()
-	# print('write weight*****************************')
-
-	#weight_array = normalization_softmax(weight_array)
-
 	predict_weighted_merge = 0
 	#load model weights and checkpoint file
 	predict_temp = weight_array[0] * struct_Onehot_model.predict(test_oneofkeyX)

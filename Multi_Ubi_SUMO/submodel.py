@@ -53,16 +53,6 @@ def OnehotNetwork(train_oneofkeyX,trainY,val_oneofkeyX,valY,
 
 		OnehotNetwork = Model(Oneofkey_inputs,Oneofkey_outputs)
 
-		# output1 = OnehotNetwork.get_layer(index=0).output
-		# print('output1',output1)
-		# with open('result/onefit.txt', mode='a') as resFile:
-		# 	resFile.write(str(output1))
-
-		# shape1 =OnehotNetwork.get_layer(index=0).output_shape
-		# print('shape1',shape1)
-		# with open('result/oneshape.txt', mode='a') as resFile:
-		# 	resFile.write(str(shape1))
-
 		#optimization = SGD(lr=0.01, momentum=0.9, nesterov= True)
 		optimization='Nadam'
 		OnehotNetwork.compile(loss='binary_crossentropy',optimizer=optimization,metrics=['accuracy'])
@@ -128,13 +118,7 @@ def OtherNetwork(train_physicalXo,trainY,val_physicalXo,valY,
 		#OfitHistory = OtherNetwork.fit(train_physicalXo,trainY,batch_size=4096,nb_epoch=50,shuffle=True,callbacks=[early_stopping,checkpointer,weight_checkpointer], class_weight={0:0.1,1:1},validation_data=(val_physicalXo,valY))
 		OfitHistory = OtherNetwork.fit(train_physicalXo,trainY,batch_size=4096,epochs=50,shuffle=True,callbacks=[early_stopping,loss_checkpointer,weight_checkpointer], class_weight='auto',validation_data=(val_physicalXo,valY))
 		OtherNetwork = load_model("model/"+str(train_time)+'model/OtherNetwork.h5')
-		#plt.subplot(2,4,2)
-		#plt.plot(OfitHistory.history["binary_accuracy"], label="OtherNetwork_TrainAcc")
-		#plt.plot(OfitHistory.history["loss"], label="OtherNetwork_Trainloss")
-		#plt.plot(OfitHistory.history["val_binary_accuracy"], label="OtherNetwork_ValAcc")
-		#plt.plot(OfitHistory.history["val_loss"], label="OtherNetwork_Valloss")
-		#plt.legend()
-		#plt.savefig('model/'+str(train_time)+'model/Opic.jpg')
+
 	return OtherNetwork
 #3
 def PhysicochemicalNetwork(train_physicalXp,trainY,val_physicalXp,valY,
@@ -178,13 +162,7 @@ def PhysicochemicalNetwork(train_physicalXp,trainY,val_physicalXp,valY,
 		#PfitHistory = PhysicochemicalNetwork.fit(train_physicalXp,trainY,batch_size=4096,nb_epoch=50,shuffle=True,callbacks=[early_stopping,checkpointer,weight_checkpointer],class_weight={0:0.1,1:1},validation_data=(val_physicalXp,valY))
 		PfitHistory = PhysicochemicalNetwork.fit(train_physicalXp,trainY,batch_size=4096,epochs=50,shuffle=True,callbacks=[early_stopping,loss_checkpointer,weight_checkpointer],class_weight='auto',validation_data=(val_physicalXp,valY))
 		PhysicochemicalNetwork = load_model("model/"+str(train_time)+'model/PhysicochemicalNetwork.h5')
-		#plt.subplot(2,4,3)
-		#plt.plot(PfitHistory.history["binary_accuracy"], label="PhysicochemicalNetwork_TrainAcc")
-		#plt.plot(PfitHistory.history["loss"], label="PhysicochemicalNetwork_Trainloss")
-		#plt.plot(PfitHistory.history["val_binary_accuracy"], label="PhysicochemicalNetwork_ValAcc")
-		#plt.plot(PfitHistory.history["val_loss"], label="PhysicochemicalNetwork_Valloss")
-		#plt.legend()
-		#plt.savefig('model/'+str(train_time)+'model/Ppic.jpg')
+
 	return PhysicochemicalNetwork
 #4
 def HydrophobicityNetwork(train_physicalXh,trainY,val_physicalXh,valY,
@@ -232,13 +210,7 @@ def HydrophobicityNetwork(train_physicalXh,trainY,val_physicalXh,valY,
 		#HfitHistory = HydrophobicityNetwork.fit(train_physicalXh,trainY,batch_size=4096,nb_epoch=50,shuffle=True,callbacks=[early_stopping,checkpointer,weight_checkpointer],class_weight={0:0.1,1:1},validation_data=(val_physicalXh,valY))
 		HfitHistory = HydrophobicityNetwork.fit(train_physicalXh,trainY,batch_size=4096,epochs=50,shuffle=True,callbacks=[early_stopping,loss_checkpointer,weight_checkpointer],class_weight='auto',validation_data=(val_physicalXh,valY))
 		HydrophobicityNetwork = load_model("model/"+str(train_time)+'model/HydrophobicityNetwork.h5')
-		#plt.subplot(2,4,4)
-		#plt.plot(HfitHistory.history["binary_accuracy"], label="HydrophobicityNetwork_TrainAcc")
-		#plt.plot(HfitHistory.history["loss"], label="HydrophobicityNetwork_Trainloss")
-		#plt.plot(HfitHistory.history["val_binary_accuracy"], label="HydrophobicityNetwork_ValAcc")
-		#plt.plot(HfitHistory.history["val_loss"], label="HydrophobicityNetwork_Valloss")
-		#plt.legend()
-		#plt.savefig('model/'+str(train_time)+'model/Hpic.jpg')
+
 	return HydrophobicityNetwork
 #5
 def CompositionNetwork(train_physicalXc,trainY,val_physicalXc,valY,
@@ -277,13 +249,7 @@ def CompositionNetwork(train_physicalXc,trainY,val_physicalXc,valY,
 		#CfitHistory = CompositionNetwork.fit(train_physicalXc,trainY,batch_size=4096,nb_epoch=50,shuffle=True,callbacks=[early_stopping,checkpointer,weight_checkpointer],class_weight={0:0.1,1:1},validation_data=(val_physicalXc,valY))
 		CfitHistory = CompositionNetwork.fit(train_physicalXc,trainY,batch_size=4096,epochs=50,shuffle=True,callbacks=[early_stopping,loss_checkpointer,weight_checkpointer],class_weight='auto',validation_data=(val_physicalXc,valY))
 		CompositionNetwork = load_model("model/"+str(train_time)+'model/CompositionNetwork.h5')
-		#plt.subplot(2,4,5)
-		#plt.plot(CfitHistory.history["binary_accuracy"], label="CompositionNetwork_TrainAcc")
-		#plt.plot(CfitHistory.history["loss"], label="CompositionNetwork_Trainloss")
-		#plt.plot(CfitHistory.history["val_binary_accuracy"], label="CompositionNetwork_ValAcc")
-		#plt.plot(CfitHistory.history["val_loss"], label="CompositionNetwork_Valloss")
-		#plt.legend()
-		#plt.savefig('model/'+str(train_time)+'model/Cpic.jpg')
+
 	return CompositionNetwork
 #6
 def BetapropensityNetwork(train_physicalXb,trainY,val_physicalXb,valY,
@@ -326,13 +292,7 @@ def BetapropensityNetwork(train_physicalXb,trainY,val_physicalXb,valY,
 		#BfitHistory = BetapropensityNetwork.fit(train_physicalXb,trainY,batch_size=4096,nb_epoch=50,shuffle=True,callbacks=[early_stopping,checkpointer,weight_checkpointer],class_weight={0:0.1,1:1},validation_data=(val_physicalXb,valY))
 		BfitHistory = BetapropensityNetwork.fit(train_physicalXb,trainY,batch_size=4096,epochs=50,shuffle=True,callbacks=[early_stopping,loss_checkpointer,weight_checkpointer],class_weight='auto',validation_data=(val_physicalXb,valY))
 		BetapropensityNetwork = load_model("model/"+str(train_time)+'model/BetapropensityNetwork.h5')
-		#plt.subplot(2,4,6)
-		#plt.plot(BfitHistory.history["binary_accuracy"], label="BetapropensityNetwork_TrainAcc")
-		#plt.plot(BfitHistory.history["loss"], label="BetapropensityNetwork_Trainloss")
-		#plt.plot(BfitHistory.history["val_binary_accuracy"], label="BetapropensityNetwork_ValAcc")
-		#plt.plot(BfitHistory.history["val_loss"], label="BetapropensityNetwork_Valloss")
-		#plt.legend()
-		#plt.savefig('model/'+str(train_time)+'model/Bpic.jpg')
+
 	return BetapropensityNetwork
 #7
 def AlphaturnpropensityNetwork(train_physicalXa,trainY,val_physicalXa,valY,
@@ -380,11 +340,5 @@ def AlphaturnpropensityNetwork(train_physicalXa,trainY,val_physicalXa,valY,
 		#AfitHistory = AlphaturnpropensityNetwork.fit(train_physicalXa,trainY,batch_size=4096,nb_epoch=50,shuffle=True,callbacks=[early_stopping,checkpointer,weight_checkpointer],class_weight={0:0.1,1:1},validation_data=(val_physicalXa,valY))
 		AfitHistory = AlphaturnpropensityNetwork.fit(train_physicalXa,trainY,batch_size=4096,epochs=50,shuffle=True,callbacks=[early_stopping,loss_checkpointer,weight_checkpointer],class_weight='auto',validation_data=(val_physicalXa,valY))
 		AlphaturnpropensityNetwork = load_model("model/"+str(train_time)+'model/AlphaturnpropensityNetwork.h5')
-		#plt.subplot(2,4,7)
-		#plt.plot(AfitHistory.history['binary_accuracy'], label="AlphaturnpropensityNetwork_TrainAcc")
-		#plt.plot(AfitHistory.history['loss'], label="AlphaturnpropensityNetwork_Trainloss")
-		#plt.plot(AfitHistory.history['val_binary_accuracy'], label="AlphaturnpropensityNetwork_ValAcc")
-		#plt.plot(AfitHistory.history['val_loss'], label="AlphaturnpropensityNetwork_Valloss")
-		#plt.legend()    	
-		#plt.savefig('model/'+str(train_time)+'model/Apic.jpg')       	
+  	
 	return AlphaturnpropensityNetwork
